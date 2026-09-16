@@ -17,7 +17,6 @@ compute_next_base_path
 
 ynh_script_progression --message="Backing up the app before upgrading (safety snapshot)..."
 ynh_backup_before_upgrade
-ynh_abort_if_errors
 
 ynh_script_progression --message="Stopping the application..."
 ynh_systemd_action --service_name="$app" --action="stop"
@@ -46,8 +45,8 @@ ynh_add_nginx_config
 
 ynh_script_progression --message="Refreshing the RAG cron job..."
 node_bin_dir=$(dirname "$(command -v node)")
+ynh_node_path="$node_bin_dir"
 ynh_add_config --template="../conf/cron_rag_refresh" --destination="/etc/cron.weekly/$app-rag-refresh"
-ynh_replace_string --match_string="__YNH_NODE_PATH__" --replace_string="$node_bin_dir" --target_file="/etc/cron.weekly/$app-rag-refresh"
 chmod +x "/etc/cron.weekly/$app-rag-refresh"
 
 ynh_script_progression --message="Restarting the application..."
