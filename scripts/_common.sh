@@ -6,10 +6,10 @@
 admin_lova_build() {
 	pushd "$install_dir" || ynh_die --message="Cannot cd into $install_dir"
 
-	ynh_exec_warn_less ynh_exec_as "$app" env PATH="$ynh_node_load_PATH:$PATH" npm ci --production=false
+	ynh_exec_warn_less ynh_exec_as "$app" $ynh_node_load_PATH npm ci --production=false
 	NEXT_BASE_PATH="$next_base_path" \
 		NEXT_PUBLIC_BASE_PATH="$next_base_path" \
-		ynh_exec_as "$app" env PATH="$ynh_node_load_PATH:$PATH" npm run build
+		ynh_exec_as "$app" $ynh_node_load_PATH npm run build
 
 	popd || ynh_die --message="Cannot leave $install_dir"
 }
