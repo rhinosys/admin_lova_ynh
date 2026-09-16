@@ -44,8 +44,7 @@ ynh_add_systemd_config
 ynh_add_nginx_config
 
 ynh_script_progression --message="Refreshing the RAG cron job..."
-node_bin_dir=$(dirname "$(command -v node)")
-ynh_node_path="$node_bin_dir"
+ynh_node_path="$(dirname "$ynh_node")"
 ynh_add_config --template="../conf/cron_rag_refresh" --destination="/etc/cron.weekly/$app-rag-refresh"
 chmod +x "/etc/cron.weekly/$app-rag-refresh"
 
