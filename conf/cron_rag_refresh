@@ -1,0 +1,13 @@
+#!/bin/bash
+# Weekly RAG refresh for __APP__ — re-scrapes the DokuWiki and re-indexes it.
+# Installed by the install/upgrade scripts at /etc/cron.weekly/__APP__-rag-refresh.
+
+LOG_FILE="/var/log/__APP__/rag-refresh.log"
+cd "__INSTALL_DIR__" || exit 1
+
+{
+	echo "=== $(date -Iseconds) — RAG refresh starting ==="
+	sudo -u __APP__ env PATH="$PATH" npm run rag:crawl
+	sudo -u __APP__ env PATH="$PATH" npm run rag:index
+	echo "=== $(date -Iseconds) — RAG refresh finished ==="
+} >> "$LOG_FILE" 2>&1
