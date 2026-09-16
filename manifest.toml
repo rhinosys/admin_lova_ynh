@@ -61,7 +61,7 @@ ram.runtime = "300M"
 
     [resources.sources.app]
         url = "https://github.com/rhinosys/lovAssistant/archive/refs/heads/master.tar.gz"
-        sha256 = ""
+        sha256 = "d3c6f94e447e085e8c9d10b780f41b400352e6ef15f269df836811396a2d7f89"
 
     [resources.database]
         type = "postgresql"
