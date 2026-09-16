@@ -1,0 +1,24 @@
+#!/bin/bash
+
+source /usr/share/yunohost/helpers
+
+ynh_script_progression --message="Removing the systemd service..."
+ynh_remove_systemd_config
+yunohost service remove "$app" 2>/dev/null || true
+
+ynh_script_progression --message="Removing the nginx configuration..."
+ynh_remove_nginx_config
+
+ynh_script_progression --message="Removing the RAG refresh cron job..."
+ynh_secure_remove --file="/etc/cron.weekly/$app-rag-refresh"
+
+ynh_script_progression --message="Removing Node.js..."
+ynh_remove_nodejs
+
+ynh_script_progression --message="Removing application files..."
+ynh_secure_remove --file="$install_dir"
+
+ynh_script_progression --message="Removing log files..."
+ynh_secure_remove --file="/var/log/$app"
+
+ynh_script_progression --message="Removal complete" --last
