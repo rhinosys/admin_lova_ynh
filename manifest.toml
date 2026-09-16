@@ -37,7 +37,7 @@ ram.runtime = "300M"
     default = "visitors"
 
     [install.mistral_api_key]
-    ask.fr = "Clé API Mistral AI (obligatoire, pour le chat et la RAG)"
+    ask.fr = "Clé API Mistral AI (obligatoire, pour le chat et le RAG)"
     ask.en = "Mistral AI API key (required, used for chat and RAG)"
     type = "string"
 
