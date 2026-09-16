@@ -12,7 +12,7 @@ maintainers = ["nicolas.rineau"]
 [upstream]
 license = "free"
 website = "https://labovilleurbanne.fr/"
-code = "https://github.com/nrineau/AdminLova"
+code = "https://github.com/rhinosys/lovAssistant"
 
 [integration]
 yunohost = ">= 11.2"
@@ -60,7 +60,7 @@ ram.runtime = "300M"
         packages = "postgresql"
 
     [resources.sources.app]
-        url = "https://github.com/nrineau/AdminLova/archive/refs/heads/main.tar.gz"
+        url = "https://github.com/rhinosys/lovAssistant/archive/refs/heads/master.tar.gz"
         sha256 = ""
 
     [resources.database]
