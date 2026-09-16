@@ -1,12 +1,15 @@
 #!/bin/bash
 
 source /usr/share/yunohost/helpers
-source scripts/_common.sh
+source _common.sh
 
 ynh_script_progression --message="Reading settings..."
 session_secret=$(ynh_app_setting_get --app=$app --key=session_secret)
 mistral_api_key=$(ynh_app_setting_get --app=$app --key=mistral_api_key)
 ollama_base_url=$(ynh_app_setting_get --app=$app --key=ollama_base_url)
+
+ynh_install_nodejs --nodejs_version=22
+ynh_use_nodejs
 
 path="$new_path"
 domain="$new_domain"
@@ -16,10 +19,7 @@ ynh_script_progression --message="Stopping the application..."
 ynh_systemd_action --service_name="$app" --action="stop"
 
 ynh_script_progression --message="Updating environment configuration for the new URL..."
-env_path="$install_dir/.env"
-ynh_replace_string --match_string="^APP_BASE_URL=.*" --replace_string="APP_BASE_URL=\"https://${domain}${path%/}\"" --target_file="$env_path"
-ynh_replace_string --match_string="^NEXT_BASE_PATH=.*" --replace_string="NEXT_BASE_PATH=\"$next_base_path\"" --target_file="$env_path"
-ynh_replace_string --match_string="^NEXT_PUBLIC_BASE_PATH=.*" --replace_string="NEXT_PUBLIC_BASE_PATH=\"$next_base_path\"" --target_file="$env_path"
+admin_lova_write_env
 
 ynh_script_progression --message="Rebuilding the application (basePath is baked in at build time)..."
 admin_lova_build

@@ -7,7 +7,7 @@ cd "__INSTALL_DIR__" || exit 1
 
 {
 	echo "=== $(date -Iseconds) — RAG refresh starting ==="
-	sudo -u __APP__ env PATH="$PATH" npm run rag:crawl
-	sudo -u __APP__ env PATH="$PATH" npm run rag:index
+	sudo -u __APP__ env PATH="__YNH_NODE_PATH__:$PATH" npm run rag:crawl
+	sudo -u __APP__ env PATH="__YNH_NODE_PATH__:$PATH" npm run rag:index
 	echo "=== $(date -Iseconds) — RAG refresh finished ==="
 } >> "$LOG_FILE" 2>&1
