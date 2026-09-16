@@ -19,7 +19,7 @@ yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
 ldap = false
-sso = true
+sso = false
 disk = "200M"
 ram.build = "1G"
 ram.runtime = "300M"
@@ -39,7 +39,7 @@ ram.runtime = "300M"
     [install.mistral_api_key]
     ask.fr = "Clé API Mistral AI (obligatoire, pour le chat et le RAG)"
     ask.en = "Mistral AI API key (required, used for chat and RAG)"
-    type = "string"
+    type = "password"
 
     [install.ollama_base_url]
     ask.fr = "URL d'un serveur Ollama local sur le réseau (optionnel, laisser vide si non utilisé)"
@@ -58,6 +58,11 @@ ram.runtime = "300M"
 
     [resources.apt]
         packages = "postgresql"
+
+    [resources.sources.app]
+        url = "https://github.com/nrineau/AdminLova/archive/refs/heads/main.tar.gz"
+        sha256 = "SKIP_CHECK"
+        autoupdate.strategy = "latest_github_release"
 
     [resources.database]
         type = "postgresql"
