@@ -37,7 +37,7 @@ ynh_script_progression --message="Rebuilding the application..."
 admin_lova_build
 
 ynh_script_progression --message="Running database migrations..."
-ynh_exec_as "$app" $ynh_node_load_PATH env --chdir="$install_dir" npm run db:migrate
+ynh_exec_as "$app" $ynh_node_load_PATH env --chdir="$install_dir" "$ynh_npm" run db:migrate
 
 ynh_script_progression --message="Refreshing systemd and nginx configuration..."
 ynh_add_systemd_config
