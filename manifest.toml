@@ -1,0 +1,63 @@
+packaging_format = 2
+
+id = "admin_lova"
+name = "Assistant Fablab (AdminLova)"
+description.fr = "Assistant IA de chat pour le FabLab, avec RAG sur le wiki historique"
+description.en = "AI chat assistant for the FabLab, with RAG over the historical wiki"
+
+version = "0.1.0~ynh1"
+
+maintainers = ["nicolas.rineau"]
+
+[upstream]
+license = "free"
+website = "https://labovilleurbanne.fr/"
+code = "https://github.com/nrineau/AdminLova"
+
+[integration]
+yunohost = ">= 11.2"
+architectures = "all"
+multi_instance = true
+ldap = false
+sso = true
+disk = "200M"
+ram.build = "1G"
+ram.runtime = "300M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.path]
+    type = "path"
+    default = "/"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+    [install.mistral_api_key]
+    ask.fr = "Clé API Mistral AI (obligatoire, pour le chat et la RAG)"
+    ask.en = "Mistral AI API key (required, used for chat and RAG)"
+    type = "string"
+
+    [install.ollama_base_url]
+    ask.fr = "URL d'un serveur Ollama local sur le réseau (optionnel, laisser vide si non utilisé)"
+    ask.en = "URL of a local Ollama server on the LAN (optional, leave empty if unused)"
+    type = "string"
+    default = ""
+    optional = true
+
+[resources]
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.ports]
+        main.default = 3005
+
+    [resources.apt]
+        packages = "postgresql"
+
+    [resources.database]
+        type = "postgresql"
