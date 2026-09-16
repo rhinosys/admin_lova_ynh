@@ -61,8 +61,7 @@ ram.runtime = "300M"
 
     [resources.sources.app]
         url = "https://github.com/nrineau/AdminLova/archive/refs/heads/main.tar.gz"
-        sha256 = "SKIP_CHECK"
-        autoupdate.strategy = "latest_github_release"
+        sha256 = ""
 
     [resources.database]
         type = "postgresql"
