@@ -1,0 +1,15 @@
+#!/bin/bash
+
+source /usr/share/yunohost/helpers
+
+ynh_script_progression --message="Backing up the application files..."
+ynh_backup --src_path="$install_dir" --not_mandatory
+
+ynh_script_progression --message="Backing up the systemd and nginx configuration..."
+ynh_backup --src_path="/etc/systemd/system/$app.service"
+ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+
+ynh_script_progression --message="Backing up the RAG refresh cron job..."
+ynh_backup --src_path="/etc/cron.weekly/$app-rag-refresh" --not_mandatory
+
+ynh_script_progression --message="Backup complete" --last
