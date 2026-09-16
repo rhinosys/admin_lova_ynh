@@ -1,0 +1,59 @@
+#!/bin/bash
+
+source /usr/share/yunohost/helpers
+source scripts/_common.sh
+
+ynh_script_progression --message="Reading settings..."
+session_secret=$(ynh_app_setting_get --app=$app --key=session_secret)
+mistral_api_key=$(ynh_app_setting_get --app=$app --key=mistral_api_key)
+ollama_base_url=$(ynh_app_setting_get --app=$app --key=ollama_base_url)
+
+compute_next_base_path
+
+ynh_script_progression --message="Stopping the application..."
+ynh_systemd_action --service_name="$app" --action="stop"
+
+ynh_script_progression --message="Upgrading Node.js..."
+ynh_install_nodejs --nodejs_version=22
+
+ynh_script_progression --message="Fetching updated sources..."
+ynh_setup_source --dest_dir="$install_dir" --source_id="app" \
+	--full_replace=1 --git_repo="$ADMIN_LOVA_REPO" --git_revision="$ADMIN_LOVA_REF" \
+	--keep="wiki-old .env"
+chown -R "$app:$app" "$install_dir"
+
+ynh_script_progression --message="Refreshing environment configuration..."
+env_path="$install_dir/.env"
+cp conf/.env.template "$env_path"
+ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$env_path"
+ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$env_path"
+ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$env_path"
+ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$env_path"
+ynh_replace_string --match_string="__SESSION_SECRET__" --replace_string="$session_secret" --target_file="$env_path"
+ynh_replace_string --match_string="__MISTRAL_API_KEY__" --replace_string="$mistral_api_key" --target_file="$env_path"
+ynh_replace_string --match_string="__OLLAMA_BASE_URL__" --replace_string="$ollama_base_url" --target_file="$env_path"
+ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$env_path"
+ynh_replace_string --match_string="__PATH__" --replace_string="${path%/}" --target_file="$env_path"
+ynh_replace_string --match_string="__NEXT_BASE_PATH__" --replace_string="$next_base_path" --target_file="$env_path"
+chmod 600 "$env_path"
+chown "$app:$app" "$env_path"
+
+ynh_script_progression --message="Rebuilding the application..."
+admin_lova_build
+
+ynh_script_progression --message="Running database migrations..."
+ynh_exec_as "$app" env PATH="$PATH" --chdir="$install_dir" npm run db:migrate
+
+ynh_script_progression --message="Refreshing systemd and nginx configuration..."
+ynh_add_systemd_config
+ynh_add_nginx_config
+
+ynh_script_progression --message="Refreshing the RAG cron job..."
+ynh_add_config --template="../conf/cron_rag_refresh" --destination="/etc/cron.weekly/$app-rag-refresh"
+chmod +x "/etc/cron.weekly/$app-rag-refresh"
+
+ynh_script_progression --message="Restarting the application..."
+ynh_systemd_action --service_name="$app" --action="start" \
+	--log_path="/var/log/$app/$app.log" --line_match="Ready in"
+
+ynh_script_progression --message="Upgrade complete" --last
