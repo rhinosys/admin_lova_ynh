@@ -9,7 +9,6 @@ cd "__INSTALL_DIR__" || exit 1
 {
 	echo "=== $(date -Iseconds) — RAG refresh starting ==="
 	# Set PATH after sudo so npm's env-node shebang and child scripts use Node 22.
-	sudo -u __APP__ /usr/bin/env PATH="__YNH_NODE_PATH__:/usr/local/bin:/usr/bin:/bin" "__YNH_NODE_PATH__/npm" run rag:crawl
-	sudo -u __APP__ /usr/bin/env PATH="__YNH_NODE_PATH__:/usr/local/bin:/usr/bin:/bin" "__YNH_NODE_PATH__/npm" run rag:index
+	sudo -u __APP__ /usr/bin/env PATH="__YNH_NODE_PATH__:/usr/local/bin:/usr/bin:/bin" "__YNH_NODE_PATH__/npm" run rag:refresh
 	echo "=== $(date -Iseconds) — RAG refresh finished ==="
 } >> "$LOG_FILE" 2>&1

@@ -31,10 +31,8 @@ ynh_script_progression --message="Running database migrations..."
 ynh_exec_as "$app" $ynh_node_load_PATH env --chdir="$install_dir" "$ynh_npm" run db:migrate
 
 ynh_script_progression --message="Building the initial RAG index (scraping the DokuWiki, this can take a minute)..."
-ynh_exec_as "$app" $ynh_node_load_PATH env --chdir="$install_dir" "$ynh_npm" run rag:crawl \
-	|| ynh_print_warn --message="RAG crawl failed — the app will still work, without RAG grounding, until the next cron refresh."
-ynh_exec_as "$app" $ynh_node_load_PATH env --chdir="$install_dir" "$ynh_npm" run rag:index \
-	|| ynh_print_warn --message="RAG indexing failed — the app will still work, without RAG grounding, until the next cron refresh."
+ynh_exec_as "$app" $ynh_node_load_PATH env --chdir="$install_dir" "$ynh_npm" run rag:refresh \
+	|| ynh_print_warn --message="RAG refresh failed — check the RAG status in the app or the next cron refresh."
 
 ynh_script_progression --message="Setting up log directory..."
 mkdir -p "/var/log/$app"

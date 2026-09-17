@@ -97,3 +97,27 @@ dans les fichiers de configuration du package, conservés par YunoHost.
 La disponibilité de l'option est vérifiée pour les anciennes versions.
 Testé sur 12.1.41.2 : permission avec `logo_hash`, PNG servi en HTTP 200,
 et enregistrement depuis le chemin absolu utilisé lors de la restauration.
+
+## Maintenance du RAG (0.1.0~ynh2)
+
+Le package utilise `rag:refresh` pour l'initialisation et le cron : même verrou
+et même statut que le bouton de l'interface. Le statut affiche les documents
+réellement indexés et les fragments, avec la date du dernier index utilisable.
+La permission `admin_lova.rag` réserve `/api/rag/refresh` aux administrateurs
+YunoHost ; le statut `/api/rag` reste accessible selon les droits de l'app.
+Se connecter au portail YunoHost comme administrateur pour lancer la mise à
+jour depuis le chat. L'index précédent reste disponible durant le traitement.
+
+Les sources sont désormais fixées à un commit avec son SHA256, plutôt qu'à
+l'archive mutable de master.
+
+Validation Docker du panneau RAG : upgrade 0.1.0~ynh2 réussi, API de statut
+avec 74 documents / 383 fragments, POST accepté en 202, second POST refusé,
+cron concurrent refusé par le même verrou. POST visiteur via nginx redirigé
+vers l'authentification ; permission de maintenance limitée à admins.
+Panneau inspecté dans le navigateur : compteurs visibles, étape « Collecte du
+wiki… », bouton désactivé pendant le traitement.
+La mise à jour réelle s'est terminée avec succès : nouvel horodatage d'index,
+statut « À jour », 74 documents et 383 fragments, bouton réactivé sans recharger
+la page. Tests applicatifs : suite de 73 tests passée, puis 6 tests ciblés de
+maintenance passés après ajout du scénario de succès (74 tests au total).
