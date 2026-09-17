@@ -71,3 +71,20 @@ Les scénarios upgrade et change_url ne sont pas couverts par cette session.
 Limite applicative observée : `/chat/api/health/ready` répond unhealthy parce
 qu'il contrôle Ollama même lorsque seul Mistral est utilisé. PostgreSQL et
 Mistral répondent healthy. La correction de ce contrôle appartient à lovAssistant.
+
+## Régression : boucle de redirection sur la page d'entrée
+
+Le test de santé API seul ne couvre pas la page d'entrée. L'ancienne location
+nginx `/chat/` provoquait un 301 de `/chat` vers `/chat/`, suivi du 308 Next.js
+inverse. La location bornée `^/chat(?:/|$)` laisse Next.js normaliser l'URL.
+
+Après correction, vérifications via nginx :
+
+- `/chat` : HTTP 200 ;
+- `/chat/` : HTTP 308 vers `/chat`, puis HTTP 200 ;
+- `/chat/chat` (page conversation de l'app sous basePath `/chat`) : HTTP 200 ;
+- les 10 ressources CSS/JavaScript référencées par cette page : HTTP 200 ;
+- `/chat/api/health` : HTTP 200 ;
+- `/chat-other` : HTTP 404, non capturé par la location de l'application.
+
+Configuration validée avec `nginx -t` avant rechargement.
