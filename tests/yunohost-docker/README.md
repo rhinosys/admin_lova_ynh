@@ -121,3 +121,22 @@ La mise à jour réelle s'est terminée avec succès : nouvel horodatage d'index
 statut « À jour », 74 documents et 383 fragments, bouton réactivé sans recharger
 la page. Tests applicatifs : suite de 73 tests passée, puis 6 tests ciblés de
 maintenance passés après ajout du scénario de succès (74 tests au total).
+
+## Fiabilité des réponses (0.1.0~ynh3)
+
+Suppression des faux inventaires de secours YesWiki (Prusa MK3S+/laser) et des
+valeurs de disponibilité/matériaux inventées. L'application vérifie désormais
+les citations exactes avant affichage et n'affiche pas de prose factuelle
+librement générée. Les messages système provenant du navigateur sont refusés.
+
+Validation : 85 tests applicatifs réussis, vérification TypeScript, build
+Next.js sous Node 22 dans le conteneur. Question réelle « liste les imprimantes
+3D » testée avec Mistral : extraits de la page Impression 3D citant P1S, A1 mini,
+Creality Ender et LulzBot TAZ Workhorse, sans inventer une Prusa ni un état actuel.
+Les documents consultés ne constituent pas un inventaire exhaustif. Leur
+exactitude et leur actualité restent celles du wiki ; voir la documentation
+`docs/grounded-answers.md` dans le dépôt de l'application.
+
+La liste des imprimantes est extraite directement des lignes de la page
+Impression 3D, sans génération du modèle. Tests de fausse suggestion Prusa et
+de demande de sa source : aucune confirmation fabriquée.

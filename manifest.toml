@@ -5,7 +5,7 @@ name = "Assistant Fablab (AdminLova)"
 description.fr = "Assistant IA de chat pour le FabLab, avec RAG sur le wiki historique"
 description.en = "AI chat assistant for the FabLab, with RAG over the historical wiki"
 
-version = "0.1.0~ynh2"
+version = "0.1.0~ynh3"
 
 maintainers = ["nicolas.rineau"]
 
@@ -67,8 +67,8 @@ ram.runtime = "300M"
         packages = "postgresql"
 
     [resources.sources.app]
-        url = "https://github.com/rhinosys/lovAssistant/archive/9edf5d7064b4cf9ff9b45f35e10158ce0155d99e.tar.gz"
-        sha256 = "c361337838e932a6bbbad409b15c4b03eca32e15425a562c1a0b5440888555e5"
+        url = "https://github.com/rhinosys/lovAssistant/archive/c7fd9b76977ea5e35145c53108f3c5b5880baa9d.tar.gz"
+        sha256 = "14d27cbca306f8c03e07951c06f0714e8c0693fa1036385ba8ab27ad515ce268"
 
     [resources.database]
         type = "postgresql"
