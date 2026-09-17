@@ -16,6 +16,12 @@ admin_lova_build() {
 # setting placeholder. Shared by install/upgrade/change_url to avoid drift.
 admin_lova_write_env() {
 	local env_path="$install_dir/.env"
+	local ollama_url="${ollama_base_url:-}"
+	# Optional input may be empty or the literal string "undefined".
+	# The app validates this URL even when Mistral is selected.
+	case "$ollama_url" in
+		""|undefined) ollama_url="http://127.0.0.1:11434" ;;
+	esac
 	cp ../conf/.env.template "$env_path"
 	ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$env_path"
 	ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$env_path"
@@ -23,7 +29,7 @@ admin_lova_write_env() {
 	ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$env_path"
 	ynh_replace_string --match_string="__SESSION_SECRET__" --replace_string="$session_secret" --target_file="$env_path"
 	ynh_replace_string --match_string="__MISTRAL_API_KEY__" --replace_string="$mistral_api_key" --target_file="$env_path"
-	ynh_replace_string --match_string="__OLLAMA_BASE_URL__" --replace_string="$ollama_base_url" --target_file="$env_path"
+	ynh_replace_string --match_string="__OLLAMA_BASE_URL__" --replace_string="$ollama_url" --target_file="$env_path"
 	ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$env_path"
 	ynh_replace_string --match_string="__PATH__" --replace_string="${path%/}" --target_file="$env_path"
 	ynh_replace_string --match_string="__NEXT_BASE_PATH__" --replace_string="$next_base_path" --target_file="$env_path"
