@@ -140,3 +140,23 @@ exactitude et leur actualité restent celles du wiki ; voir la documentation
 La liste des imprimantes est extraite directement des lignes de la page
 Impression 3D, sans génération du modèle. Tests de fausse suggestion Prusa et
 de demande de sa source : aucune confirmation fabriquée.
+
+## Accompagnement RAG et recherche web (0.1.0~ynh4)
+
+Remplace le rendu extractif de ynh3 par une réponse naturelle relue : procédures,
+explications, sources regroupées. Suppression des branches propres aux questions
+sur les imprimantes : la récupération et la synthèse sont générales.
+
+Quand une procédure manque, recherche réelle via Mistral Conversations/web_search,
+références fournies par l’outil et indication explicite de la provenance externe.
+La recherche utilise la clé Mistral existante et implique des appels cloud
+supplémentaires, y compris si Ollama est sélectionné pour la conversation.
+
+Validation : 87 tests réussis, TypeScript, build Next.js Node 22 dans le conteneur
+YunoHost 12.1.41.2. Appels réels : guide A1 mini avec sources regroupées, synthèse
+de l’inventaire documentaire, dépliage UV Blender absent du RAG donnant une aide
+web avec des références réelles dont le manuel Blender. Recherche FreeCAD testée
+également directement via l’API. Une formulation abusive « disponibles » repérée
+pendant le test a conduit à renforcer la distinction générale entre éléments
+référencés et disponibilité actuelle. Ces garde-fous par modèle ne constituent
+pas une preuve automatique de chaque affirmation.
