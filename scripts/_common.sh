@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Register the bundled icon for this private package (no catalog logo).
+# Older YunoHost releases do not expose the custom permission logo option.
+admin_lova_install_logo() {
+	local logo_path="${1:-../conf/logo.png}"
+	if yunohost user permission update --help | grep -- '--logo' >/dev/null; then
+		yunohost user permission update "$app.main" --logo "$logo_path"
+	else
+		ynh_print_warn --message="This YunoHost version does not support custom portal icons."
+	fi
+}
+
 # Runs npm ci + npm run build with the env vars that must be baked into
 # the build (NEXT_BASE_PATH/NEXT_PUBLIC_BASE_PATH affect next.config.ts
 # at build time and cannot be changed afterwards without rebuilding).

@@ -52,4 +52,6 @@ ynh_script_progression --message="Restarting the application..."
 ynh_systemd_action --service_name="$app" --action="start" \
 	--log_path="/var/log/$app/$app.log" --line_match="Ready in"
 
+admin_lova_install_logo
+
 ynh_script_progression --message="Upgrade complete" --last

@@ -88,3 +88,12 @@ Après correction, vérifications via nginx :
 - `/chat-other` : HTTP 404, non capturé par la location de l'application.
 
 Configuration validée avec `nginx -t` avant rechargement.
+
+## Icône du portail
+
+`conf/logo.png` est enregistré avec `yunohost user permission update --logo`
+à l'installation, à la mise à jour et à la restauration. Le fichier est inclus
+dans les fichiers de configuration du package, conservés par YunoHost.
+La disponibilité de l'option est vérifiée pour les anciennes versions.
+Testé sur 12.1.41.2 : permission avec `logo_hash`, PNG servi en HTTP 200,
+et enregistrement depuis le chemin absolu utilisé lors de la restauration.
