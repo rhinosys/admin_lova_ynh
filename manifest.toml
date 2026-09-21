@@ -67,8 +67,8 @@ ram.runtime = "300M"
         packages = "postgresql"
 
     [resources.sources.app]
-        url = "https://github.com/rhinosys/lovAssistant/archive/653b0b67c6ee396c628e0119b121d209854be6da.tar.gz"
-        sha256 = "c92e56475a73ed49387226dffdc0a97c001ddf790d46254d7422e7fb89dd2446"
+        url = "https://github.com/rhinosys/lovAssistant/archive/44c29bf901d8280ec8b6dd512e1a8eeae10961fd.tar.gz"
+        sha256 = "b6e874f5e908854c0c530d3a3cbfaac3f026b26b0feb1229cf158ac5b53c9da6"
 
     [resources.database]
         type = "postgresql"
