@@ -5,6 +5,8 @@ source /usr/share/yunohost/helpers
 ynh_script_progression --message="Removing the systemd service..."
 ynh_remove_systemd_config
 yunohost service remove "$app" 2>/dev/null || true
+ynh_remove_systemd_config --service="$app-framateam"
+yunohost service remove "$app-framateam" 2>/dev/null || true
 
 ynh_script_progression --message="Removing the nginx configuration..."
 ynh_remove_nginx_config

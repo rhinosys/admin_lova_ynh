@@ -12,6 +12,21 @@ du dépôt lovAssistant (AdminLova) pour le design complet.
 yunohost app install https://github.com/rhinosys/admin_lova_ynh --debug
 ```
 
+## Après l'installation (Framateam)
+
+1. Se connecter au portail avec un compte du groupe `admins` (ou ajouter le
+   groupe voulu à la permission « admin » de l'application).
+2. Ouvrir `https://<domaine><chemin>/admin/framateam`, saisir le compte
+   Framateam (de préférence un compte dédié sans double authentification),
+   tester la connexion, cocher les canaux à indexer / où le bot répond, puis
+   « Synchroniser maintenant ».
+3. Le service `admin_lova-framateam` (journal `/var/log/admin_lova/framateam.log`)
+   prend la configuration en compte sans redémarrage.
+
+La clé `APP_ENCRYPTION_KEY` qui chiffre le mot de passe Framateam est générée à
+l'installation (ou à la première mise à jour) et conservée dans les réglages de
+l'application ; elle fait partie des sauvegardes.
+
 ## Périmètre
 
 Usage personnel / LOV. Ne vise pas (pour l'instant) le catalogue officiel

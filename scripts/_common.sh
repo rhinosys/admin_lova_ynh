@@ -39,6 +39,7 @@ admin_lova_write_env() {
 	ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$env_path"
 	ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$env_path"
 	ynh_replace_string --match_string="__SESSION_SECRET__" --replace_string="$session_secret" --target_file="$env_path"
+	ynh_replace_string --match_string="__APP_ENCRYPTION_KEY__" --replace_string="$app_encryption_key" --target_file="$env_path"
 	ynh_replace_string --match_string="__MISTRAL_API_KEY__" --replace_string="$mistral_api_key" --target_file="$env_path"
 	ynh_replace_string --match_string="__OLLAMA_BASE_URL__" --replace_string="$ollama_url" --target_file="$env_path"
 	ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$env_path"
@@ -46,6 +47,23 @@ admin_lova_write_env() {
 	ynh_replace_string --match_string="__NEXT_BASE_PATH__" --replace_string="$next_base_path" --target_file="$env_path"
 	chmod 600 "$env_path"
 	chown "$app:$app" "$env_path"
+}
+
+# Loads the key encrypting secrets stored in the database, generating it once.
+# Changing it makes stored secrets unreadable (the admin must re-enter them).
+admin_lova_encryption_key() {
+	app_encryption_key=$(ynh_app_setting_get --app=$app --key=app_encryption_key)
+	if [ -z "$app_encryption_key" ]; then
+		app_encryption_key=$(openssl rand -base64 32)
+		ynh_app_setting_set --app=$app --key=app_encryption_key --value="$app_encryption_key"
+	fi
+}
+
+# Installs (or refreshes) the Framateam bot service. It stays idle until an
+# account is configured in the admin area.
+admin_lova_add_bot_service() {
+	ynh_add_systemd_config --service="$app-framateam" --template="framateam.service"
+	yunohost service add "$app-framateam" --description="Assistant Fablab — bot Framateam" --log="/var/log/$app/framateam.log"
 }
 
 # Computes next_base_path from YunoHost's $path variable ("" for root,

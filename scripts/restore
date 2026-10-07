@@ -18,6 +18,10 @@ ynh_script_progression --message="Restoring systemd and nginx configuration..."
 ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 systemctl enable "$app.service"
+ynh_restore_file --origin_path="/etc/systemd/system/$app-framateam.service" --not_mandatory
+if [ -e "/etc/systemd/system/$app-framateam.service" ]; then
+	systemctl enable "$app-framateam.service"
+fi
 
 ynh_script_progression --message="Restoring the RAG refresh cron job..."
 ynh_restore_file --origin_path="/etc/cron.weekly/$app-rag-refresh" --not_mandatory
@@ -32,6 +36,10 @@ ynh_systemd_action --service_name="$app" --action="start" \
 	--log_path="/var/log/$app/$app.log" --line_match="Ready in"
 
 yunohost service add "$app" --description="Assistant Fablab (AdminLova)" --log="/var/log/$app/$app.log"
+if [ -e "/etc/systemd/system/$app-framateam.service" ]; then
+	ynh_systemd_action --service_name="$app-framateam" --action="start" --log_path="/var/log/$app/framateam.log"
+	yunohost service add "$app-framateam" --description="Assistant Fablab — bot Framateam" --log="/var/log/$app/framateam.log"
+fi
 
 # Restoring the nginx file does not load it into the running reverse proxy.
 nginx -t

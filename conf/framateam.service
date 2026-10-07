@@ -1,0 +1,19 @@
+[Unit]
+Description=Assistant Fablab (AdminLova) — bot Framateam
+After=network.target postgresql.service __APP__.service
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+WorkingDirectory=__INSTALL_DIR__
+EnvironmentFile=__INSTALL_DIR__/.env
+# Websocket listener + scheduled sync; idle until an account is configured in /admin/framateam.
+ExecStart=__YNH_NODE__ --import tsx __INSTALL_DIR__/scripts/framateam-bot.ts
+Restart=always
+RestartSec=30
+StandardOutput=append:/var/log/__APP__/framateam.log
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target

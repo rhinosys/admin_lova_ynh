@@ -12,6 +12,7 @@ ynh_script_progression --message="Reading settings..."
 session_secret=$(ynh_app_setting_get --app=$app --key=session_secret)
 mistral_api_key=$(ynh_app_setting_get --app=$app --key=mistral_api_key)
 ollama_base_url=$(ynh_app_setting_get --app=$app --key=ollama_base_url)
+admin_lova_encryption_key
 
 compute_next_base_path
 
@@ -20,6 +21,9 @@ ynh_backup_before_upgrade
 
 ynh_script_progression --message="Stopping the application..."
 ynh_systemd_action --service_name="$app" --action="stop"
+if [ -e "/etc/systemd/system/$app-framateam.service" ]; then
+	ynh_systemd_action --service_name="$app-framateam" --action="stop"
+fi
 
 ynh_script_progression --message="Upgrading Node.js..."
 ynh_install_nodejs --nodejs_version=22
@@ -41,6 +45,7 @@ ynh_exec_as "$app" $ynh_node_load_PATH env --chdir="$install_dir" "$ynh_npm" run
 
 ynh_script_progression --message="Refreshing systemd and nginx configuration..."
 ynh_add_systemd_config
+admin_lova_add_bot_service
 ynh_add_nginx_config
 
 ynh_script_progression --message="Refreshing the RAG cron job..."
@@ -51,6 +56,7 @@ chmod +x "/etc/cron.weekly/$app-rag-refresh"
 ynh_script_progression --message="Restarting the application..."
 ynh_systemd_action --service_name="$app" --action="start" \
 	--log_path="/var/log/$app/$app.log" --line_match="Ready in"
+ynh_systemd_action --service_name="$app-framateam" --action="start" --log_path="/var/log/$app/framateam.log"
 
 admin_lova_install_logo
 

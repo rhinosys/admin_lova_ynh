@@ -12,6 +12,7 @@ session_secret=$(ynh_string_random --length=32)
 ynh_app_setting_set --app=$app --key=session_secret --value="$session_secret"
 ynh_app_setting_set --app=$app --key=mistral_api_key --value="$mistral_api_key"
 ynh_app_setting_set --app=$app --key=ollama_base_url --value="$ollama_base_url"
+admin_lova_encryption_key
 
 ynh_script_progression --message="Installing Node.js..."
 ynh_install_nodejs --nodejs_version=22
@@ -42,6 +43,7 @@ ynh_use_logrotate
 ynh_script_progression --message="Configuring systemd service..."
 ynh_add_systemd_config
 yunohost service add "$app" --description="Assistant Fablab (AdminLova)" --log="/var/log/$app/$app.log"
+admin_lova_add_bot_service
 
 ynh_script_progression --message="Configuring nginx..."
 ynh_add_nginx_config
@@ -54,6 +56,7 @@ chmod +x "/etc/cron.weekly/$app-rag-refresh"
 ynh_script_progression --message="Starting the application..."
 ynh_systemd_action --service_name="$app" --action="start" \
 	--log_path="/var/log/$app/$app.log" --line_match="Ready in"
+ynh_systemd_action --service_name="$app-framateam" --action="start" --log_path="/var/log/$app/framateam.log"
 
 admin_lova_install_logo
 
